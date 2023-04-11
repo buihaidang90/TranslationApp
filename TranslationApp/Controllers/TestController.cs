@@ -2,8 +2,10 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
-using TranslationApp.Ultility;
+using TranslationApp.Utilities;
+using TranslationApp.Models;
 
 namespace TranslationApp.Controllers
 {
@@ -21,15 +23,15 @@ namespace TranslationApp.Controllers
                 if (r == null) r = "";
                 if (r == "")
                 {
-                    return getJObjectMessage("Application is ready (with empty param).");
+                    return clsUtilities.GetJObjectMessage("Application is ready (with empty param).");
                 }
                 else if (r.ToLower() == "ConnectSql".ToLower() || r.ToLower() == "SqlConnect".ToLower())
                 {
-                    SqlObject sql = new SqlObject(clsUltility.GetConnectionString());
+                    SqlObject sql = new SqlObject(clsUtilities.GetConnectionString());
                     if (sql.GetConnectionState())
-                        return getJObjectMessage("State: connected - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
+                        return clsUtilities.GetJObjectMessage("State: connected - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
                     else
-                        return getJObjectMessage("State: can not connect - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
+                        return clsUtilities.GetJObjectMessage("State: can not connect - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
                 }
                 //else if (r.ToLower() == "print".ToLower())
                 //{
@@ -37,31 +39,28 @@ namespace TranslationApp.Controllers
                 //    //sql.ConnectionTimeout = 8;
                 //    if (sql.GetConnectionState())
                 //    {
-                //        return getJObjectMessage("State: connected - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
+                //        return clsUltility.GetJObjectMessage("State: connected - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
                 //    }
                 //    else
-                //        return getJObjectMessage("State: can not connect - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
+                //        return clsUltility.GetJObjectMessage("State: can not connect - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
                 //}
+                else if (r.ToLower() == "MyInfo".ToLower())
+                {
+                    AgentInfo agent =clsUtilities.GetAgentInfo();
+                    if (agent.Ip=="") return clsUtilities.GetJObjectMessage("Can not get your info!");
+                    return clsUtilities.GetJObjectMessage(agent);
+                }
                 else
                 {
-                    return getJObjectMessage("Your value is [" + r + "]");
+                    return clsUtilities.GetJObjectMessage("Your value is [" + r + "]");
                 }
             }
             catch (Exception ex)
             {
                 //Console.WriteLine(ex.Message);
-                return getJObjectMessage("");
+                return clsUtilities.GetJObjectMessage("");
             }
         }
-
-        private JObject getJObjectMessage(string Msg)
-        {
-            if (Msg == null) Msg = "";
-            string str = "{ \"message\": \"" + Msg + "\"}";
-            JObject json = JObject.Parse(str);
-            return json;
-        }
-
 
 
     }

@@ -4,9 +4,10 @@ using System.Net;
 using System.Web.Http;
 
 using Google.Cloud.Translation.V2;
-using TranslationApp.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TranslationApp.Models;
+using TranslationApp.Utilities;
 
 namespace TranslationApp.Controllers
 {
@@ -20,7 +21,12 @@ namespace TranslationApp.Controllers
             rpo.status = (int)HttpStatusCode.Gone;
             rpo.message = HttpStatusCode.Gone.ToString(); // api is no longer available
             //
-            if (rqu.data.Length == 0)
+            if (!clsAuthentication.Authenticate(rqu.key, rqu.user))
+            {
+                rpo.status = (int)HttpStatusCode.NonAuthoritativeInformation;
+                rpo.message = HttpStatusCode.NonAuthoritativeInformation.ToString();
+            }
+            else if (rqu.data.Length == 0)
             {
                 rpo.status = (int)HttpStatusCode.LengthRequired;
                 rpo.message = HttpStatusCode.LengthRequired.ToString();
@@ -60,6 +66,7 @@ namespace TranslationApp.Controllers
                 }
                 else
                 {
+                    int chargeCount = 0;
                     try
                     {
                         List<DataResponse> _lstOutput = new List<DataResponse>();
@@ -77,6 +84,8 @@ namespace TranslationApp.Controllers
                             r.source = (string.IsNullOrEmpty(rqu.source) || string.IsNullOrWhiteSpace(rqu.source)) ? _item.DetectedSourceLanguage : rqu.source;
                             r.charge = _lstRequests[i].Length;
                             _lstOutput.Add(r);
+                            //
+                            chargeCount += r.charge;
                         }
                         //
                         rpo.data = _lstOutput.ToArray();
@@ -87,10 +96,21 @@ namespace TranslationApp.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        //Console.WriteLine(ex.Message);
                         rpo.data = new DataResponse[] { };
                         rpo.status = (int)HttpStatusCode.BadRequest;
                         rpo.message = HttpStatusCode.BadRequest.ToString() + "-" + ex.Message;
+                    }
+                    try
+                    {
+                        AgentInfo agent = clsUtilities.GetAgentInfo();
+                        PR_Statistics objStatistics = new PR_Statistics();
+                        StatisticsStruct item = objStatistics.Create(rqu.user, chargeCount, agent.Ip, agent.UserAgent, agent.Country, agent.Region, agent.City, agent.Isp, string.Empty);
+                        objStatistics.Save(item);
+                    }
+                    catch (Exception ex)
+                    {
+                        //Console.WriteLine(ex.Message);
                     }
                 }
             }
@@ -111,6 +131,7 @@ namespace TranslationApp.Controllers
             "target":"vi",
             "source":"",
             "key":""
+            "user":""
          }
          * 
          * 

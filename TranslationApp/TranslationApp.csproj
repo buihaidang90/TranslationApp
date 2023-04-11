@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\RestRequestController.cs" />
     <Compile Include="Controllers\SqlTranslateV2Controller.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -153,8 +154,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DataType.cs" />
+    <Compile Include="Models\SqlModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Ultility\clsUltility.cs" />
+    <Compile Include="Utilities\clsAuthentication.cs" />
+    <Compile Include="Utilities\clsUltilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
