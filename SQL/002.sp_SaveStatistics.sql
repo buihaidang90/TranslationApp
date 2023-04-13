@@ -16,13 +16,13 @@ begin
 		declare @iXml int
 		exec sp_xml_preparedocument @iXml out, @Xml
 		select
-			ChargeCharaters=try_cast(ChargeCharaters as int)
+			ChargeCharacters=try_cast(ChargeCharacters as int)
 			--, RequestTime=try_cast(RequestTime as datetime2)
 			, Customer, IpAddress, UserAgent, Country, Region, City, ISP, Remark
 		into #MS
 		from openxml(@iXml,'//MS',2)
 		with (
-			ChargeCharaters int, RequestTime datetime2
+			ChargeCharacters int, RequestTime datetime2
 			, Customer varchar(200), IpAddress varchar(200), UserAgent nvarchar(2000)
 			, Country nvarchar(2000), Region nvarchar(2000), City nvarchar(2000), ISP nvarchar(2000)
 			, Remark nvarchar(2000)
@@ -36,9 +36,9 @@ begin
 				select Customer,Customer,'Auto inserted by ws',getdate()
 				from #MS
 			end	
-			insert into PR_Statistics(ChargeCharaters, RequestTime
+			insert into PR_Statistics(ChargeCharacters, RequestTime
 				, Customer, IpAddress, UserAgent, Country, Region, City, ISP, Remark)
-			select ChargeCharaters, getdate()
+			select ChargeCharacters, getdate()
 				, Customer, IpAddress, UserAgent, Country, Region, City, ISP, Remark
 			from #MS
 			where isnull(Customer,'')<>''  

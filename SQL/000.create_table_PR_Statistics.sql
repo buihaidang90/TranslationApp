@@ -2,7 +2,7 @@ if object_id('PR_Statistics') is not null drop table PR_Statistics
 go
 create table PR_Statistics(
 	[MainID] bigint identity(1,1) NOT NULL,
-	[ChargeCharaters] int NULL,
+	[ChargeCharacters] int NULL,
 	[Customer] varchar(200) NULL,
 	[RequestTime] datetime2 NULL,
 	[IpAddress] varchar(200) NULL,

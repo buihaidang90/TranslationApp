@@ -163,9 +163,9 @@ namespace TranslationApp.Models
         }
         private DataTable createData(List<StatisticsStruct> ListItem, string TableName)
         {
-            string capChargeCharaters = "ChargeCharaters", capCustomer = "Customer", capIpAddress = "IpAddress", capUserAgent = "UserAgent", capCountry = "Country", capRegion = "Region", capCity = "City", capISP = "ISP", capRemark = "Remark";
+            string capChargeCharacters = "ChargeCharacters", capCustomer = "Customer", capIpAddress = "IpAddress", capUserAgent = "UserAgent", capCountry = "Country", capRegion = "Region", capCity = "City", capISP = "ISP", capRemark = "Remark";
             DataTable dt = new DataTable(TableName == "" ? "MS" : TableName);
-            dt.Columns.Add(capChargeCharaters);
+            dt.Columns.Add(capChargeCharacters);
             dt.Columns.Add(capCustomer);
             dt.Columns.Add(capIpAddress);
             dt.Columns.Add(capUserAgent);
@@ -177,7 +177,7 @@ namespace TranslationApp.Models
             foreach (StatisticsStruct item in ListItem)
             {
                 DataRow row = dt.NewRow();
-                row[capChargeCharaters] = item.ChargeCharaters;
+                row[capChargeCharacters] = item.ChargeCharaters;
                 row[capCustomer] = item.Customer;
                 row[capIpAddress] = item.IpAddress;
                 row[capUserAgent] = item.UserAgent;
