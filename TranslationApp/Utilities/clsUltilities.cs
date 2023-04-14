@@ -89,9 +89,28 @@ namespace TranslationApp.Utilities
             agent.Region = "";
             agent.City = "";
             agent.Isp = "";
-            if (!Network.IsIpAddress(compactAgent.Ip)) return agent;
-            Network.LocationDetails geoInfo = Network.GetLocationDetail(compactAgent.Ip);
-            agent.Ip = compactAgent.Ip;
+            Network.LocationDetails geoInfo;
+            if (!Network.IsIpAddress(compactAgent.Ip))
+            {
+                if (compactAgent.Ip == "::1")
+                {
+                    /*debug case in local server*/
+                    geoInfo = Network.GetLocationDetail(Network.GetExternalIp());
+                    if (!Network.IsIpAddress(geoInfo.query)) return agent;
+                    agent.Ip = geoInfo.query;
+                    agent.UserAgent = compactAgent.UserAgent;
+                    agent.RequestTime = DateTime.Now.ToString();
+                    agent.Country = geoInfo.country;
+                    agent.Region = geoInfo.regionName;
+                    agent.City = geoInfo.city;
+                    agent.Isp = string.Concat(geoInfo.isp, " - ", geoInfo.org);
+                    return agent;
+                }
+                return agent;
+            }
+            geoInfo = Network.GetLocationDetail(compactAgent.Ip);
+            if (geoInfo.message == "private range") geoInfo = Network.GetLocationDetail(Network.GetExternalIp()); /*client & ws are same location*/
+            agent.Ip = geoInfo.query;
             agent.UserAgent = compactAgent.UserAgent;
             agent.RequestTime = DateTime.Now.ToString();
             agent.Country = geoInfo.country;
