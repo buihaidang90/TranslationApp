@@ -17,7 +17,7 @@ namespace TranslationApp.Controllers
             rpo.status = (int)HttpStatusCode.Gone;
             rpo.message = HttpStatusCode.Gone.ToString(); // api is no longer available
             bool saveSuccess = false;
-            if (!clsAuthentication.Authenticate(rqu.key, clsAuthentication.DefaultUser))
+            if (!clsAuthentication.Authenticate(rqu.key, rqu.user))
             {
                 rpo.status = (int)HttpStatusCode.NonAuthoritativeInformation;
                 rpo.message = HttpStatusCode.NonAuthoritativeInformation.ToString();
@@ -59,5 +59,7 @@ namespace TranslationApp.Controllers
             string _response = JsonConvert.SerializeObject(rpo);
             return JObject.Parse(_response);
         }
+
     }
+
 }

@@ -55,6 +55,7 @@ namespace TranslationApp.Models
     {
         public CustomerStruct[] data { get; set; }
         public string key { get; set; }
+        public string user { get; set; }
     }
     public struct CustomerResponse
     {

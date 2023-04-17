@@ -32,6 +32,7 @@ begin
 			, ChargeCharacters=sum(isnull(t.ChargeCharacters,0)), RequestTime=null
 			, IpAddress='', UserAgent='', Country='', Region='', City='', ISP=''
 		from #bhd t	
+		having count(t.Customer)>0
 		union all
 		select stt=cast(null as int), GroupCol=t.Customer
 			, CustomerCode=t.Customer, CustomerName=max(t.[Name])

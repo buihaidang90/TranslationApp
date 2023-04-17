@@ -4,7 +4,6 @@ using BHD_Framework;
 using TranslationApp.Utilities;
 using System.Data;
 using System.Data.SqlClient;
-using BHD_Framework;
 
 namespace TranslationApp.Models
 {

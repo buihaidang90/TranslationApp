@@ -28,22 +28,11 @@ namespace TranslationApp.Controllers
                 else if (r.ToLower() == "ConnectSql".ToLower() || r.ToLower() == "SqlConnect".ToLower())
                 {
                     SqlObject sql = new SqlObject(clsUtilities.GetConnectionString());
-                    if (sql.GetConnectionState())
-                        return clsUtilities.GetJObjectMessage("State: connected - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
-                    else
-                        return clsUtilities.GetJObjectMessage("State: can not connect - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
+                    string msg = string.Concat("Connected state: {0} - Timeout: ", sql.ConnectionTimeout.ToString(), " second");
+                    if (sql.GetConnectionState()) msg = string.Format(msg, "Success");
+                    else msg = string.Format(msg, "Fail");
+                    return clsUtilities.GetJObjectMessage(msg);
                 }
-                //else if (r.ToLower() == "print".ToLower())
-                //{
-                //    SqlObject sql = new SqlObject(Ultility.Ultility.GetConnectionString());
-                //    //sql.ConnectionTimeout = 8;
-                //    if (sql.GetConnectionState())
-                //    {
-                //        return clsUltility.GetJObjectMessage("State: connected - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
-                //    }
-                //    else
-                //        return clsUltility.GetJObjectMessage("State: can not connect - Timeout: " + sql.ConnectionTimeout.ToString() + " second");
-                //}
                 else if (r.ToLower() == "MyInfo".ToLower())
                 {
                     AgentInfo agent =clsUtilities.GetAgentInfo();
