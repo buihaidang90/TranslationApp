@@ -58,7 +58,8 @@ namespace TranslationApp.Models
             return false;
         }
         public bool Exists(CustomerStruct Customer) { return Exists(Customer.Code.Trim().Replace("'", "''")); }
-        public bool Save(CustomerStruct[] Customers, int Mode) {
+        public bool Save(CustomerStruct[] Customers, int Mode)
+        {
             List<CustomerStruct> lst = new List<CustomerStruct>();
             foreach (CustomerStruct cust in Customers) lst.Add(cust);
             return Save(lst, Mode);
@@ -135,7 +136,7 @@ namespace TranslationApp.Models
             {
                 SqlParameter[] paras = new SqlParameter[2];
                 paras[0] = new SqlParameter("@HasError", SqlDbType.Bit); paras[0].Direction = ParameterDirection.Output;
-                paras[1] = new SqlParameter("@Xml", SqlDbType.Xml); paras[1].SqlValue =BHD_Framework.Utility.CreateXml(createData(new List<StatisticsStruct>() { Item }, "MS"));
+                paras[1] = new SqlParameter("@Xml", SqlDbType.Xml); paras[1].SqlValue = BHD_Framework.Utility.CreateXml(createData(new List<StatisticsStruct>() { Item }, "MS"));
                 SqlObj.ExecScalar("sp_SaveStatistics", SqlSettings.SqlCommandType.StoredProcedure, paras);
                 bool hasError = true; bool.TryParse(paras[0].Value.ToString(), out hasError);
                 return !hasError;
@@ -189,23 +190,97 @@ namespace TranslationApp.Models
             }
             return dt;
         }
+
+        public List<StatisticsRecord> loadStatisticsRecord(DateTime FDate, DateTime TDate, string CustomerCode)
+        {
+            //Console.WriteLine(sqlObj.ConnectionString);
+            DataTable dt = new DataTable();
+            string capLevel = "Level", capstt = "stt", capGroupCol = "GroupCol",
+                capRequestTime = "RequestTime", capChargeCharacters = "ChargeCharacters",
+                capCustomerCode = "CustomerCode", capCustomerName = "CustomerName",
+                capIpAddress = "IpAddress", capUserAgent = "UserAgent", capCountry = "Country",
+                capRegion = "Region", capCity = "City", capIsp = "Isp";
+            try
+            {
+                string sql = string.Format(@"exec sp_LoadStatistics '{0:yyyyMMdd}','{1:yyyyMMdd}','{2}' ", FDate, TDate, CustomerCode.Replace("'", "''"));
+                dt = SqlObj.ExecDataTable(sql);
+            }
+            catch
+            {
+                //dt.Columns.Add(capLevel, typeof(int));
+                //dt.Columns.Add(capstt, typeof(int));
+                //dt.Columns.Add(capGroupCol);
+                //dt.Columns.Add(capCustomerCode);
+                //dt.Columns.Add(capCustomerName);
+                //dt.Columns.Add(capChargeCharacters, typeof(int));
+                //dt.Columns.Add(capRequestTime);
+                //dt.Columns.Add(capIpAddress);
+                //dt.Columns.Add(capUserAgent);
+                //dt.Columns.Add(capCountry);
+                //dt.Columns.Add(capRegion);
+                //dt.Columns.Add(capCity);
+                //dt.Columns.Add(capIsp);
+            }
+            List<StatisticsRecord> lst = new List<StatisticsRecord>();
+            foreach (DataRow row in dt.Rows)
+            {
+                //    if (row[capLevel].ToString() != "1") continue;
+                StatisticsRecord rec = new StatisticsRecord();
+                if (row[capLevel].ToString() != "")
+                    rec.Level = int.Parse(row[capLevel].ToString());
+                if (row[capstt].ToString() != "")
+                    rec.stt = int.Parse(row[capstt].ToString());
+                rec.GroupCol = row[capGroupCol].ToString();
+
+                if (row[capChargeCharacters].ToString() != "")
+                    rec.ChargeCharacters = int.Parse(row[capChargeCharacters].ToString());
+                //if (row[capRequestTime].ToString() != "")
+                //    rec.RequestTime = DateTime.Parse(row[capRequestTime].ToString());
+                rec.RequestTime = row[capRequestTime].ToString();
+                rec.CustomerCode = row[capCustomerCode].ToString();
+                rec.CustomerName = row[capCustomerName].ToString();
+                rec.IpAddress = row[capIpAddress].ToString();
+                rec.UserAgent = row[capUserAgent].ToString();
+                rec.Country = row[capCountry].ToString();
+                rec.Region = row[capRegion].ToString();
+                rec.City = row[capCity].ToString();
+                rec.Isp = row[capIsp].ToString();
+                //
+                lst.Add(rec);
+            }
+            return lst;
+        }
+        public struct StatisticsStruct
+        {
+            public int ChargeCharaters { get; set; }
+            public string Customer { get; set; }
+            public string IpAddress { get; set; }
+            public string UserAgent { get; set; }
+            public string Country { get; set; }
+            public string Region { get; set; }
+            public string City { get; set; }
+            public string ISP { get; set; }
+            public string Remark { get; set; }
+        }
+
+        public struct StatisticsRecord
+        {
+            public int? Level { get; set; }
+            public int? stt { get; set; }
+            public string GroupCol { get; set; }
+            public string CustomerCode { get; set; }
+            public string CustomerName { get; set; }
+            public int ChargeCharacters { get; set; }
+            public string RequestTime { get; set; }
+            public string IpAddress { get; set; }
+            public string UserAgent { get; set; }
+            public string Country { get; set; }
+            public string Region { get; set; }
+            public string City { get; set; }
+            public string Isp { get; set; }
+        }
+
     }
-    public struct StatisticsStruct
-    {
-        public int ChargeCharaters { get; set; }
-        public string Customer { get; set; }
-        public string IpAddress { get; set; }
-        public string UserAgent { get; set; }
-        public string Country { get; set; }
-        public string Region { get; set; }
-        public string City { get; set; }
-        public string ISP { get; set; }
-        public string Remark { get; set; }
-    }
-
-
-
-
 
 
 

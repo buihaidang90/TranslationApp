@@ -148,6 +148,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\RestRequestController.cs" />
     <Compile Include="Controllers\SqlTranslateV2Controller.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TranslateV2Controller.cs" />
     <Compile Include="Global.asax.cs">

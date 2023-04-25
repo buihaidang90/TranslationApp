@@ -105,7 +105,7 @@ namespace TranslationApp.Controllers
                     {
                         AgentInfo agent = clsUtilities.GetAgentInfo();
                         PR_Statistics objStatistics = new PR_Statistics();
-                        StatisticsStruct item = objStatistics.Create(rqu.user, chargeCount, agent.Ip, agent.UserAgent, agent.Country, agent.Region, agent.City, agent.Isp, string.Empty);
+                        PR_Statistics.StatisticsStruct item = objStatistics.Create(rqu.user, chargeCount, agent.Ip, agent.UserAgent, agent.Country, agent.Region, agent.City, agent.Isp, string.Empty);
                         objStatistics.Save(item);
                     }
                     catch (Exception ex)

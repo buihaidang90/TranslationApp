@@ -50,7 +50,7 @@ namespace TranslationApp.Models
     public struct SqlTranslateV2Response { public DataResponse[] data { get; set; } }
     #endregion
 
-    #region Customer Request
+    #region Customer Request & Response
     public struct CustomerRequest
     {
         public CustomerStruct[] data { get; set; }
@@ -59,6 +59,23 @@ namespace TranslationApp.Models
     }
     public struct CustomerResponse
     {
+        public int status { get; set; }
+        public string message { get; set; }
+    }
+    #endregion
+
+    #region StatisticsRequest & Response
+    public struct StatisticsRequest
+    {
+        public string FDate { get; set; } //yyyyMMdd
+        public string TDate { get; set; } //yyyyMMdd
+        public string Customer { get; set; }
+        public string key { get; set; }
+        public string user { get; set; }
+    }
+    public struct StatisticsResponse
+    {
+        public PR_Statistics.StatisticsRecord[] data { get; set; }
         public int status { get; set; }
         public string message { get; set; }
     }
@@ -87,6 +104,7 @@ namespace TranslationApp.Models
     public static class CommonSettings
     {
         public static readonly string CompanyName = "MankichiSoftwareVietNam";
+        public static readonly string StringMode = "DevMode";
         public static readonly string ApiKey = clsUtilities.GetApiKey();
         public static readonly int MaxCharacterNum = 2000; // actualy is 5000 characters per request, include header
         public static readonly string GGNotAvailableMsg = "(charge: is counting by web services, GG is not available)"; // 2023.03.10 - gg api chưa có method để lấy thông số này (kể cả xem report trên Dashboard console)
