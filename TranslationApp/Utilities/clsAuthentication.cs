@@ -11,7 +11,8 @@ namespace TranslationApp.Utilities
         public static readonly string DefaultUser = "haidang@mankichi.net";
         public static bool Authenticate(object YourKey, string YourUser)
         {
-            string webConfig = System.Configuration.ConfigurationManager.AppSettings[CommonSettings.StringMode];
+            string webConfig = "";
+            try { webConfig = System.Configuration.ConfigurationManager.AppSettings[CommonSettings.StringMode]; } catch { }
             string[] arr = new string[] { "1", "yes", "true" };
             bool isDevMode = Array.IndexOf(arr, webConfig.ToLower()) > -1;
             //
