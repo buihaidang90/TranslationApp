@@ -151,6 +151,7 @@
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TranslateV2Controller.cs" />
+    <Compile Include="Controllers\VietQRController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
